@@ -1,0 +1,435 @@
+<Page x:Class="University.Main.CustomerPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:University.Main"
+      xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d"
+      Title="CustomerPage" d:DesignHeight="450" d:DesignWidth="800">
+
+    <Page.Resources>
+
+        <ResourceDictionary>
+
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="FontSize" Value="14px" />
+                <Setter Property="FontFamily" Value="/Resources/#Stapel" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+
+            <Style TargetType="{x:Type GridViewColumnHeader}">
+                <Setter Property="Foreground" Value="#163172" />
+                <Setter Property="FontFamily" Value="/Resource/#Inter" />
+                <Setter Property="Background" Value="#D6E4F0" />
+                <Setter Property="BorderBrush" Value="#D6E4F0" />
+            </Style>
+
+
+            <Style x:Key="ErrorTextBlock" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="#F44336" />
+                <Setter Property="FontSize" Value="13" />
+                <Setter Property="FontFamily" Value="/Resources/#Inter" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+
+            <Style x:Key="Input" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="material:HintAssist.FontFamily" Value="/Resources/#Inter" />
+                <Setter Property="material:HintAssist.HelperTextFontSize" Value="13" />
+                <Style.Triggers>
+                    <Trigger Property="IsFocused" Value="True">
+                        <Setter Property="BorderBrush" Value="#1E56A0" />
+                        <Setter Property="material:HintAssist.Foreground" Value="#1E56A0" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="InputCB" TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignOutlinedComboBox}">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="material:HintAssist.FontFamily" Value="/Resources/#Inter" />
+                <Setter Property="material:HintAssist.HelperTextFontSize" Value="13" />
+                <Style.Triggers>
+                    <Trigger Property="IsSelectionActive" Value="True">
+                        <Setter Property="BorderBrush" Value="#1E56A0" />
+                        <Setter Property="material:HintAssist.Foreground" Value="#1E56A0" />
+                    </Trigger>
+                    <Trigger Property="IsFocused" Value="True">
+                        <Setter Property="BorderBrush" Value="#1E56A0" />
+                        <Setter Property="material:HintAssist.Foreground" Value="#1E56A0" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="TabItemStyle" TargetType="TabItem"
+                   BasedOn="{StaticResource MaterialDesignNavigationRailTabItem}">
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="TextElement.Foreground" Value="#163172" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="TabItemCategories" TargetType="TabItem">
+                <Setter Property="FontFamily" Value="/Resources/#Inter" />
+                <Setter Property="Foreground" Value="#163172" />
+                <Setter Property="Background" Value="#eff1f4" />
+                <Setter Property="FontSize" Value="13" />
+                <Setter Property="Padding" Value="0 10 0 10" />
+
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TabItem}">
+                            <Border x:Name="Border" Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" Margin="0,0,-1,0">
+                                <Grid>
+                                    <Rectangle x:Name="interactive" Opacity="0.3" />
+                                    <ContentPresenter HorizontalAlignment="Center" Margin="12,2,12,2"
+                                                      x:Name="ContentSite" VerticalAlignment="Center"
+                                                      RecognizesAccessKey="True" ContentSource="Header" />
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Panel.ZIndex" Value="100" />
+                                    <Setter Property="Background" Value="#1E56A0" />
+                                    <Setter Property="Foreground" Value="#f6f6f6" />
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMouseOver" Value="True" />
+                                        <Condition Property="Selector.IsSelected" Value="False" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Fill" Value="Black" TargetName="interactive" />
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Opacity" Value="0.5" TargetName="interactive" />
+                                    <Setter Property="Fill" Value="Black" TargetName="interactive" />
+                                    <Setter Property="Background" Value="White" />
+                                    <Setter Property="Foreground" Value="DarkGray" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <TabControl
+        SelectionChanged="Selector_OnSelectionChanged"
+        TabStripPlacement="Left"
+        Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
+        material:ColorZoneAssist.Mode="Standard"
+        Background="#D6E4F0"
+        material:ShadowAssist.ShadowDepth="Depth3">
+
+        <TabItem
+            Name="tiCatalog"
+            Style="{StaticResource TabItemStyle}"
+            Header="{material:PackIcon Kind=CarCog, Size=35}">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <TabControl
+                    material:ColorZoneAssist.Mode="Standard"
+                    Background="#D6E4F0"
+                    TabStripPlacement="Left"
+                    material:ShadowAssist.ShadowDepth="Depth3">
+                    <TabItem
+
+                        Style="{StaticResource TabItemCategories}"
+                        Header="Запчасти для ТО">
+
+                        <StackPanel
+                            Margin="10 0 0 0">
+                            <TextBlock
+                                Text="Товары"
+                                HorizontalAlignment="Center"
+                                Foreground="#163172"
+                                FontSize="24"
+                                FontWeight="Bold"
+                                Margin="0 10 0 0" />
+
+                            <ScrollViewer VerticalScrollBarVisibility="Visible"
+                                          Height="700">
+                                <StackPanel Name="StackTO">
+
+                                </StackPanel>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </TabItem>
+
+                    <TabItem
+                        Style="{StaticResource TabItemCategories}"
+                        Header="Шины">
+
+                        <StackPanel
+                            Margin="10 0 0 0">
+                            <TextBlock
+                                Text="Товары"
+                                HorizontalAlignment="Center"
+                                Foreground="#163172"
+                                FontSize="24"
+                                FontWeight="Bold"
+                                Margin="0 10 0 0" />
+
+                            <ScrollViewer VerticalScrollBarVisibility="Visible"
+                                          Height="700">
+                                <StackPanel Name="StackTire">
+
+                                </StackPanel>
+                            </ScrollViewer>
+                        </StackPanel>
+
+                    </TabItem>
+
+                    <TabItem
+                        Style="{StaticResource TabItemCategories}"
+                        Header="Диски">
+
+                        <StackPanel
+                            Margin="10 0 0 0">
+                            <TextBlock
+                                Text="Товары"
+                                HorizontalAlignment="Center"
+                                Foreground="#163172"
+                                FontSize="24"
+                                FontWeight="Bold"
+                                Margin="0 10 0 0" />
+
+                            <ScrollViewer VerticalScrollBarVisibility="Visible"
+                                          Height="700">
+                                <StackPanel Name="StackDisc">
+
+                                </StackPanel>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </TabItem>
+
+                    <TabItem
+                        Style="{StaticResource TabItemCategories}"
+                        Header="Аккумуляторы">
+
+                        <StackPanel
+                            Margin="10 0 0 0">
+                            <TextBlock
+                                Text="Товары"
+                                HorizontalAlignment="Center"
+                                Foreground="#163172"
+                                FontSize="24"
+                                FontWeight="Bold"
+                                Margin="0 10 0 0" />
+
+                            <ScrollViewer VerticalScrollBarVisibility="Visible"
+                                          Height="700">
+                                <StackPanel Name="StackBattery">
+
+                                </StackPanel>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </TabItem>
+
+                    <TabItem
+                        Style="{StaticResource TabItemCategories}"
+                        Header="Жидкости и масла">
+
+                        <StackPanel
+                            Margin="10 0 0 0">
+                            <TextBlock
+                                Text="Товары"
+                                HorizontalAlignment="Center"
+                                Foreground="#163172"
+                                FontSize="24"
+                                FontWeight="Bold"
+                                Margin="0 10 0 0" />
+
+                            <ScrollViewer VerticalScrollBarVisibility="Visible"
+                                          Height="700">
+                                <StackPanel Name="StackOil">
+
+                                </StackPanel>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </TabItem>
+
+                    <TabItem
+                        Style="{StaticResource TabItemCategories}"
+                        Header="Автохимия">
+
+                        <StackPanel
+                            Margin="10 0 0 0">
+                            <TextBlock
+                                Text="Товары"
+                                HorizontalAlignment="Center"
+                                Foreground="#163172"
+                                FontSize="24"
+                                FontWeight="Bold"
+                                Margin="0 10 0 0" />
+
+                            <ScrollViewer VerticalScrollBarVisibility="Visible"
+                                          Height="700">
+                                <StackPanel Name="StackChemistry">
+
+                                </StackPanel>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </TabItem>
+
+                    <TabItem
+                        Style="{StaticResource TabItemCategories}"
+                        Header="Аксессуары">
+
+                        <StackPanel
+                            Margin="10 0 0 0">
+                            <TextBlock
+                                Text="Товары"
+                                HorizontalAlignment="Center"
+                                Foreground="#163172"
+                                FontSize="24"
+                                FontWeight="Bold"
+                                Margin="0 10 0 0" />
+
+                            <ScrollViewer VerticalScrollBarVisibility="Visible"
+                                          Height="700">
+                                <StackPanel Name="StackAccessories">
+
+                                </StackPanel>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </TabItem>
+
+
+                    <TabItem
+                        Style="{StaticResource TabItemCategories}"
+                        Header="Инструменты">
+
+                        <StackPanel
+                            Margin="10 0 0 0">
+                            <TextBlock
+                                Text="Товары"
+                                HorizontalAlignment="Center"
+                                Foreground="#163172"
+                                FontSize="24"
+                                FontWeight="Bold"
+                                Margin="0 10 0 0" />
+
+                            <ScrollViewer VerticalScrollBarVisibility="Visible"
+                                          Height="700">
+                                <StackPanel Name="StackInstruments">
+
+                                </StackPanel>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </TabItem>
+
+                    <TabItem
+                        Style="{StaticResource TabItemCategories}"
+                        Header="Электроника">
+
+                        <StackPanel
+                            Margin="10 0 0 0">
+                            <TextBlock
+                                Text="Товары"
+                                HorizontalAlignment="Center"
+                                Foreground="#163172"
+                                FontSize="24"
+                                FontWeight="Bold"
+                                Margin="0 10 0 0" />
+
+                            <ScrollViewer VerticalScrollBarVisibility="Visible"
+                                          Height="700">
+                                <StackPanel Name="StackElectronics">
+
+                                </StackPanel>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </TabItem>
+
+                    <TabItem
+                        Style="{StaticResource TabItemCategories}"
+                        Header="Щетки">
+
+                        <StackPanel
+                            Margin="10 0 0 0">
+                            <TextBlock
+                                Text="Товары"
+                                HorizontalAlignment="Center"
+                                Foreground="#163172"
+                                FontSize="24"
+                                FontWeight="Bold"
+                                Margin="0 10 0 0" />
+
+                            <ScrollViewer VerticalScrollBarVisibility="Visible"
+                                          Height="700">
+                                <StackPanel Name="StackBrushes">
+
+                                </StackPanel>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </TabItem>
+
+        <TabItem
+            Name="tiCart"
+            Style="{StaticResource TabItemStyle}"
+            Header="{material:PackIcon Kind=CartVariant, Size=35}">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="8*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel
+                    Orientation="Horizontal"
+                    Margin="10">
+                    <TextBlock
+                        Name="tbFullName"
+                        Foreground="#163172"
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Text=""
+                        TextAlignment="Center"
+                        VerticalAlignment="Center" />
+
+                    <TextBlock
+                        Name="tbPhoneNumber"
+                        Margin="20 0 0 0"
+                        Text=""
+                        Foreground="#1E56A0"
+                        FontSize="15"
+                        VerticalAlignment="Center" />
+                </StackPanel>
+                <ScrollViewer
+                    VerticalScrollBarVisibility="Visible"
+                    Height="700"
+                    Grid.Row="1">
+                    <StackPanel Name="StackCart">
+
+                    </StackPanel>
+                </ScrollViewer>
+                
+                <Button
+                    Click="ButtonBase_OnClick"
+                    FontFamily="/Resources/#Inter"
+                    BorderBrush="#163172"
+                    Foreground="#f6f6f6"
+                    Background="#1E56A0"
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Content="Оплатить"/>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</Page>

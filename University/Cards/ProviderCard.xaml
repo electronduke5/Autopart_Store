@@ -1,0 +1,151 @@
+<UserControl x:Class="University.Cards.ProviderCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:University.Cards"
+             xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style x:Key="FullName" TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="/Resources/#Stapel" />
+                <Setter Property="Foreground" Value="#F6F6F6" />
+                <Setter Property="FontSize" Value="18"></Setter>
+                <Setter Property="FontWeight" Value="Bold"></Setter>
+            </Style>
+
+            <Style TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="/Resources/#Inter" />
+                <Setter Property="Foreground" Value="#F6F6F6" />
+                <Setter Property="FontSize" Value="14"></Setter>
+            </Style>
+
+            <Style x:Key="Input" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
+                <Setter Property="material:HintAssist.FontFamily" Value="/Resources/#Inter" />
+                <Setter Property="Foreground" Value="#F6F6F6" />
+                <Setter Property="BorderBrush" Value="#F6F6F6" />
+                <Style.Triggers>
+                    <Trigger Property="IsFocused" Value="True">
+                        <Setter Property="BorderBrush" Value="#F6F6F6" />
+                        <Setter Property="material:HintAssist.Foreground" Value="#F6F6F6" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            </ResourceDictionary>
+    </UserControl.Resources>
+    
+     <Grid>
+        <material:Flipper
+            Margin="30 40 30 10"
+            IsFlippedChanged="Flipper_OnIsFlippedChanged">
+            <material:Flipper.FrontContent>
+                <Border
+                    Background="#1E56A0"
+                    CornerRadius="15"
+                    BorderThickness="3"
+                    BorderBrush="#163172">
+
+                    <StackPanel HorizontalAlignment="Center"
+                        Margin="10 20 10 10">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            Name="txtProvider"
+                            Text="{Binding ProviderName, 
+                            Mode=TwoWay, 
+                            UpdateSourceTrigger=PropertyChanged}"
+                            
+                            Style="{StaticResource FullName}" />
+                        <Separator Background="#163172"
+                                   Margin="0 5 0 10" />
+                       
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button
+                                FontFamily="/Resources/#Inter"
+                                Command="{x:Static material:Flipper.FlipCommand}"
+                                Margin="0 20 0 0"
+                                Padding="20 0 20 2"
+                                Foreground="#163172"
+                                BorderBrush="#F6F6F6"
+                                Background="#D6E4F0"
+                                Content="Изменить"
+                                HorizontalAlignment="Center" />
+                            <Button
+                                Click="BtnDelete_OnClick"
+                                FontFamily="/Resources/#Inter"
+                                Name="btnDelete"
+                                Margin="40 20 0 0"
+                                Padding="20 0 20 2"
+                                Foreground="#163172"
+                                BorderBrush="#F6F6F6"
+                                Background="#D6E4F0"
+                                Content="Удалить"
+                                HorizontalAlignment="Center" />
+                        </StackPanel>
+                       
+                    </StackPanel>
+                </Border>
+            </material:Flipper.FrontContent>
+
+            <material:Flipper.BackContent>
+                <Border
+                    Background="#1E56A0"
+                    CornerRadius="15"
+                    BorderThickness="3"
+                    BorderBrush="#163172">
+
+                    <StackPanel
+                        Margin="10 20 10 10">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button
+                                Command="{x:Static material:Flipper.FlipCommand}"
+                                Margin="-40 0 10 0"
+                                Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                                Foreground="#163172"
+                                BorderBrush="#F6F6F6"
+                                Background="#D6E4F0"
+                                Content="{material:PackIcon Kind=ArrowLeft, Size=35}"
+                                HorizontalAlignment="Center" />
+                            <StackPanel>
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource FullName}"
+                                    Text="Изменение поставщика"
+                                    Margin="0 0 0 0" />
+                                <Separator
+                                    Background="#163172"
+                                    Margin="0 5 -10 0" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                            <TextBox
+                                HorizontalAlignment="Center"
+                                Name="tbNameProvider"
+                                Style="{StaticResource Input}"
+                                material:HintAssist.Hint="Название поставщика"
+                                Padding="10 0 30 0"
+                                Margin="5 10 0 10" />
+                        </StackPanel>
+
+                        <Button
+                            Name="btnEditProvider"
+                            
+                            Click="BtnEditProvider_OnClick"
+                            Margin="0 10 0 10"
+                            Padding="20 0 20 2"
+                            Foreground="#163172"
+                            BorderBrush="#F6F6F6"
+                            Background="#D6E4F0"
+                            Content="Сохранить"
+                            FontFamily="/Resources/#Inter"
+                            HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+            </material:Flipper.BackContent>
+        </material:Flipper>
+    </Grid>
+</UserControl>

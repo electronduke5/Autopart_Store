@@ -1,0 +1,104 @@
+ drop table role;
+ drop table Employee;
+ 
+ drop table combination_order;
+ drop table Orders;
+ drop table Customer;
+ 
+ 
+create table Role(
+	ID_Role serial not null constraint pk_role primary key,
+	Role_Name varchar(30) not null constraint UQ_Role_Name unique
+);
+
+insert into Role(Role_Name) values ('Администратор')
+
+create table Employee(
+	ID_Employee serial not null constraint pk_user primary key,
+	Surname varchar(30) not null,
+	Name varchar(30) not null,
+	Patronymic varchar(30) null default ('-'),
+	Phone_Number varchar(19) not null constraint CH_Phone_Number
+	check (Phone_Number similar to
+		  '\+7\([0-9][0-9][0-9]\)[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'),
+	Password varchar(30) not null,
+	Role_ID int not null references Role(ID_Role)  
+);
+
+insert into Employee(Surname, Name, Patronymic, Phone_Number, Password, Role_ID)
+	values ('Гришин', 'Павел','Сергеевич','+7(901)779-50-04','admin', 1)
+
+create table Category(
+	ID_Category serial not null constraint pk_category primary key,
+	Category_Name varchar(50) not null constraint UQ_Category_Name unique
+);
+
+insert into Category(Category_Name)
+values('Запчасти для ТО'), 
+('Шины'), 
+('Диски'),
+('Аккумуляторы'),
+('Масла и жидкости'), 
+('Автохимия'), 
+('Аксессуары'),
+('Инструменты'),
+('Электоринка'),
+('Щетки');
+
+create table Provider(
+	ID_Provider serial not null constraint pk_provider primary key,
+	Provider_Name varchar(30) not null constraint UQ_Provider unique
+);
+
+create table Autopart(
+	ID_Autopart serial not null constraint pk_autopart primary key,
+	Autopart_Name varchar(50) not null,
+	Price decimal(38,2) not null constraint CH_Price check
+		(Price >= 0.0) default (0.0),
+	Count int not null constraint CH_Count check
+		(Count >= 0) default 0,
+	Category_ID int not null references Category(ID_Category),
+	Provider_ID int not null references Provider(ID_Provider)
+);
+
+create table Defect_Autopart(
+	ID_Defect serial not null constraint pk_defect primary key,
+	Count int not null constraint CH_Count_Defect check
+		(Count >= 0) default 0,
+	Autopart_ID int not null references Autopart(ID_Autopart)
+);
+
+create table Customer(
+	ID_Customer serial not null constraint pk_customer primary key,
+	Surname varchar(30) not null,
+	Name varchar(30) not null,
+	Patronymic varchar(30) null default ('-'),
+	Phone_Number varchar(19) not null constraint CH_Phone_Number
+	check (Phone_Number similar to
+		  '\+7\([0-9][0-9][0-9]\)[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'),
+	Password varchar(30) not null
+);
+ 
+
+create table Orders(
+	ID_Orders serial not null constraint pk_orders primary key,
+	Orders_Date date not null default CURRENT_DATE,
+	Customer_ID int not null references Customer(ID_Customer)
+);
+
+create table Combination_Order(
+	ID_Combination serial not null constraint pk_combination primary key,
+	Count int not null constraint CH_Count_Part check
+		(Count >= 0) default 0,
+	Autopart_ID int not null references Autopart(ID_Autopart),
+	Orders_ID int not null references Orders(ID_Orders)
+);
+
+create table Accounting(
+    ID_Accounting serial not null constraint pk_accounting primary key ,
+    Profit decimal(38,2) null constraint CH_Profit check 
+        (Profit >= 0.0  ) default (0.0),
+    Expenditure decimal(38,2) null constraint CH_Expenditure check 
+        (Expenditure <= 0.0 ) default (0.0),
+    Record_Date timestamp null default (now() :: date)
+);
